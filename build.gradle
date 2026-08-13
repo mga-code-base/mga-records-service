@@ -1,0 +1,96 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '4.0.5' // Standardized standard version
+    id 'io.spring.dependency-management' version '1.1.7'
+    id 'org.graalvm.buildtools.native' version '0.10.4'
+}
+
+group = 'com.mygym.app'
+version = '0.0.2'
+description = 'Records Core Service with JWT Security and HTTPClient5'
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(25)
+    }
+}
+
+repositories {
+    mavenCentral()
+    maven { url 'https://jitpack.io' } // Required for JitPack model resolutions
+}
+
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:2025.1.2"
+    }
+}
+
+dependencies {
+    // Core Service Dependencies
+    implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    
+    // 🎯 REPLACED STRATEGY: Official Spring Security Resource Server (Precompiled GraalVM Native Hints Built-in)
+    implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
+    
+    // GraalVM SDK Hooks
+    compileOnly 'org.graalvm.sdk:graal-sdk:24.1.1'
+    
+    // Core Shared Model Library
+    implementation 'com.github.my-gym-app:mga-all-models:develop-SNAPSHOT'
+
+    // Dynamic Environment Flipping Logic
+    if (project.gradle.startParameter.taskNames.any { it.contains("native") || it.contains("bootBuildImage") }) {
+        // Native production adds HttpClient5
+        implementation 'org.apache.httpcomponents.client5:httpclient5'
+    } else {
+        // Local dev pulls Eureka client
+        implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
+    }
+    
+    // Lombok Scaffolding
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+    
+    // Testing Scaffolding
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testCompileOnly 'org.projectlombok:lombok'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    testAnnotationProcessor 'org.projectlombok:lombok'
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
+
+// Global Spring Boot Entrypoint Metadata Setup
+springBoot {
+    mainClass = 'com.mygym.app.MgaRecordsServiceApplication'
+}
+
+// 🚀 CLEANED UP NATIVE CONFIGURATION Matrix
+tasks.named('bootBuildImage') {
+    builder = 'paketobuildpacks/builder-jammy-java-tiny'
+    pullPolicy = 'ALWAYS'
+    environment = [
+        'BP_NATIVE_IMAGE': 'true',
+        'BP_JVM_VERSION': '25',
+        'BPE_APPEND_ACTIVATEDENV': 'PRD',
+        'BPE_APPEND_SPRING_PROFILES_ACTIVE': 'native',
+        'BP_NATIVE_IMAGE_BUILD_ARGUMENTS': 
+            '--initialize-at-run-time=sun.security.util.Password$ConsoleHolder ' +
+            '--initialize-at-build-time=com.fasterxml.jackson' // Deleted unstable io.jsonwebtoken entries
+    ]
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.compilerArgs << "-Aspring.profiles.active=native"
+    options.compilerArgs << "-AactivatedEnv=PRD"
+}
+
+tasks.named('processAot') {
+    args '--spring.profiles.active=native', '--activatedEnv=PRD'
+}
