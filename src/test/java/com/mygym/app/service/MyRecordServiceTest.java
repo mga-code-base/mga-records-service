@@ -45,7 +45,7 @@ class MyRecordServiceTest {
     @Test
     @DisplayName("Should create record via RestClient post request")
     void testCreateRecord_Success() {
-        MyRecord record = new MyRecord();
+        MyRecord record = new MyRecord(null, null, null, null, null, null);
         when(restClient.post()).thenReturn(requestBodyUriSpec);
         when(requestBodyUriSpec.body(eq(record))).thenReturn(requestBodySpec);
         when(requestBodySpec.retrieve()).thenReturn(responseSpec);
@@ -59,7 +59,7 @@ class MyRecordServiceTest {
     @Test
     @DisplayName("Should fetch record by ID via RestClient get request")
     void testGetRecordById_Success() {
-        MyRecord record = new MyRecord();
+        MyRecord record = new MyRecord(null, null, null, null, null, null);
         when(restClient.get()).thenReturn(requestHeadersUriSpec);
         when(requestHeadersUriSpec.uri(eq("/{id}"), eq("REC-101"))).thenReturn(requestHeadersSpec);
         when(requestHeadersSpec.retrieve()).thenReturn(responseSpec);
@@ -73,9 +73,7 @@ class MyRecordServiceTest {
     @Test
     @DisplayName("Should aggregate 30-day progress records grouped by muscle group")
     void testGetProgressRecords_Success() {
-        MyRecord record1 = new MyRecord();
-        record1.setTargetMuscle("Chest");
-        record1.setDate(LocalDate.now().toString());
+        MyRecord record1 = new MyRecord(null, null, null, "Chest", null, LocalDate.now().toString());
 
         MyRecordsWrapper wrapper = new MyRecordsWrapper(List.of(record1));
 
@@ -87,6 +85,6 @@ class MyRecordServiceTest {
         ProgressRecords progress = myRecordService.getProgressRecords("M-101");
 
         assertNotNull(progress);
-        assertEquals(1, progress.getChestRecords().size());
+        assertEquals(1, progress.chestRecords().size());
     }
 }

@@ -29,7 +29,7 @@ class MyRecordControllerTest {
     @Test
     @DisplayName("Should create workout record via service layer")
     void testCreate_Success() {
-        MyRecord record = new MyRecord();
+        MyRecord record = new MyRecord(null, null, null, null, null, null);
         when(service.createRecord(any(MyRecord.class))).thenReturn(record);
 
         MyRecord result = controller.create(record);
@@ -41,7 +41,7 @@ class MyRecordControllerTest {
     @Test
     @DisplayName("Should read record by ID via service layer")
     void testReadById_Success() {
-        MyRecord record = new MyRecord();
+        MyRecord record = new MyRecord(null, null, null, null, null, null);
         when(service.getRecordById("REC-101")).thenReturn(record);
 
         MyRecord result = controller.readById("REC-101");
@@ -64,7 +64,7 @@ class MyRecordControllerTest {
     @Test
     @DisplayName("Should get previous records via service layer")
     void testGetPreviousRecords_Success() {
-        MyRecordsWrapper wrapper = new MyRecordsWrapper(List.of(new MyRecord()));
+        MyRecordsWrapper wrapper = new MyRecordsWrapper(List.of(new MyRecord(null, null, null, null, null, null)));
         when(service.getPreviousRecords("M-101", "Chest", "Bench Press")).thenReturn(wrapper);
 
         MyRecordsWrapper result = controller.getPreviousRecords("M-101", "Chest", "Bench Press");
@@ -76,7 +76,7 @@ class MyRecordControllerTest {
     @Test
     @DisplayName("Should get progress records via service layer")
     void testGetProgressRecords_Success() {
-        ProgressRecords progress = new ProgressRecords();
+        ProgressRecords progress = new ProgressRecords(null, null, null, null, null, null, null, null);
         when(service.getProgressRecords("M-101")).thenReturn(progress);
 
         ProgressRecords result = controller.getPreviousRecords("M-101");
