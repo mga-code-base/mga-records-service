@@ -22,7 +22,7 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(PlatformEndpoints.PUBLIC).permitAll()
-                        .requestMatchers("/api/my-records", "/api/my-records/**", "/api/workouts", "/api/workouts/**")
+                        .requestMatchers("/api/v1/my-records", "/api/v1/my-records/**", "/api/v1/workouts", "/api/v1/workouts/**")
                             .hasAnyRole("ADMIN", "TRAINER", "MEMBER")
                         .anyRequest().authenticated())
                 .oauth2ResourceServer(oauth -> oauth.jwt(jwt -> jwt.jwtAuthenticationConverter(JwtRoleConverter.create())))

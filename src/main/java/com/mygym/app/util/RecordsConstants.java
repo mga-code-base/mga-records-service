@@ -16,13 +16,13 @@ public class RecordsConstants {
 	
 	public static final String RECORDS_CRUD_PATH = "/crud/my-records";
 	
-	public final static String RECORDS_REST_MAPPING = "/api/my-records";
+	public final static String RECORDS_REST_MAPPING = "/api/v1/my-records";
 	
 	public final static String WORKOUT_CRUD_BEAN = "workoutCrudClient";
 	
 	public static final String WORKOUT_CRUD_PATH = "/crud/workouts";
 	
-	public static final String WORKOUT_REST_BASE = "/api/workouts";
+	public static final String WORKOUT_REST_BASE = "/api/v1/workouts";
 	
 	public static final String WORKOUT_CHEST_ENPOINT = "/chest";
 	
