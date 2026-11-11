@@ -2,9 +2,7 @@ package com.mygym.app.util;
 
 public class RecordsConstants {
 	
-	public final static String CONTENT_TYPE = "Content-Type";
 	
-	public final static String APP_JSON = "application/json";
 	
 	public final static String ALL_ENDPOINT = "/all";
 	
@@ -16,17 +14,13 @@ public class RecordsConstants {
 	
 	public final static String RECORDS_CRUD_BEAN = "recordsCrudClient";
 	
-	public final static String DEV_RECORDS_BASE_URL = "http://mga-records-crud-service/crud/my-records";
-	
-	public final static String PRD_RECORDS_BASE_URL = "http://mga-records-crud-service.default.svc.cluster.local:80/crud/my-records";
+	public static final String RECORDS_CRUD_PATH = "/crud/my-records";
 	
 	public final static String RECORDS_REST_MAPPING = "/api/my-records";
 	
 	public final static String WORKOUT_CRUD_BEAN = "workoutCrudClient";
 	
-	public final static String DEV_WORKOUT_BASE_URL = "http://mga-records-crud-service/crud/workouts";
-	
-	public final static String PRD_WORKOUT_BASE_URL = "http://mga-records-crud-service.default.svc.cluster.local:80/crud/workouts";
+	public static final String WORKOUT_CRUD_PATH = "/crud/workouts";
 	
 	public static final String WORKOUT_REST_BASE = "/api/workouts";
 	
